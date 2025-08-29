@@ -9,38 +9,46 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif;}
+.video-wrapper {
+  position: relative;
+  margin-bottom: 0;
+}
+.thumb-video {
+  width: 100%;
+  display: block;
+}
 .play-btn {
   cursor: pointer;
-  font-size: 48px;
+  font-size: 36px;
+  color: red;
   text-shadow: 2px 2px 4px black;
-  color: white;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+.overlay-btn {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.play-btn-bottom {
-  position: static;
-  transform: none;
-  margin-top: 8px;
-  font-size: 36px;
-}
-.video-wrapper {
-  position: relative;
-  margin-bottom: 0; /* remove extra space */
-}
-.episode-info {
+.episode-container {
   margin: 0;
-  padding: 4px 8px; /* optional padding */
+  padding: 8px;
+  text-align: center;
 }
-#wrapper-newest {
+.controls-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-top: 8px;
+}
+.w3-center-flex {
+  display: flex;
+  justify-content: center;
 }
 </style>
 </head>
-<body class="w3-grey w3-content w3-center" style="max-width:1600px">
+<body class="w3-content" style="max-width:1600px" background="img/brickwall.png">
 
 <!-- Page Header -->
 <header id="portfolio" class="w3-container w3-center w3-padding-32">
@@ -51,10 +59,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif;}
 <div id="videos-container" class="w3-container"></div>
 
 <!-- Footer -->
-<footer class="w3-container w3-padding-32 w3-black">
+<footer class="w3-container w3-padding-32 w3-dark-grey">
   <div class="w3-center">
-    <h3>THIS HAS BEEN</h3>
-    <h4>CT Scan => The Word</h4>
+    <h1 class="w3-text-aqua">THIS HAS BEEN</h1>
+    <h1 class="w3-text-aqua">CT Scan => The Word</h1>
   </div>
 </footer>
 
@@ -68,25 +76,24 @@ function isMobile() {
 fetch('videos.json')
   .then(res => res.json())
   .then(videos => {
-    // Sort by date descending (newest first)
     videos.sort((a,b) => new Date(b.date) - new Date(a.date));
 
     const container = document.getElementById('videos-container');
 
-    // Show newest video on top, centered
+    // First video (newest) centered on top
     const newest = videos[0];
     const newestHTML = `
-      <div id="wrapper-newest">
-        <div class="w3-third w3-container" style="margin:auto">
-          <div class="w3-display-container video-wrapper" data-newest="true">
-            <video class="thumb-video" style="width:100%" poster="img/${newest.poster}">
+      <div class="w3-row-padding w3-center-flex w3-margin-bottom">
+        <div class="w3-third w3-container">
+          <div class="video-wrapper">
+            <video class="thumb-video" poster="img/${newest.poster}">
               <source src="videos/${newest.file}" type="video/mp4">
             </video>
-            <div class="play-btn">▶</div>
+            <div class="play-btn overlay-btn">▶</div>
           </div>
-          <div class="w3-container w3-white episode-info">
+          <div class="w3-container w3-white episode-container">
             <p><b>Episode:</b> ${newest.title}</p>
-            <div class="play-btn-bottom-container"></div>
+            <div class="controls-container"></div>
           </div>
         </div>
       </div>
@@ -94,7 +101,7 @@ fetch('videos.json')
     `;
     container.innerHTML += newestHTML;
 
-    // Remaining videos for the grid
+    // Remaining videos in grid
     const gridVideos = videos.slice(1);
     for (let i = 0; i < gridVideos.length; i += 3) {
       const rowVideos = gridVideos.slice(i, i+3);
@@ -102,14 +109,15 @@ fetch('videos.json')
       rowVideos.forEach(video => {
         rowHTML += `
           <div class="w3-third w3-container w3-margin-bottom">
-            <div class="w3-display-container video-wrapper">
-              <video class="thumb-video" style="width:100%" poster="img/${video.poster}">
+            <div class="video-wrapper">
+              <video class="thumb-video" poster="img/${video.poster}">
                 <source src="videos/${video.file}" type="video/mp4">
               </video>
-              <div class="play-btn">▶</div>
+              <div class="play-btn overlay-btn">▶</div>
             </div>
-            <div class="w3-container w3-white episode-info">
+            <div class="w3-container w3-white episode-container">
               <p><b>Episode:</b> ${video.title}</p>
+              <div class="controls-container"></div>
             </div>
           </div>
         `;
@@ -118,48 +126,66 @@ fetch('videos.json')
       container.innerHTML += rowHTML;
     }
 
-    // Add play/pause functionality
+    // Video control logic
     document.querySelectorAll(".video-wrapper").forEach(wrapper => {
       const video = wrapper.querySelector(".thumb-video");
-      const btn = wrapper.querySelector(".play-btn");
+      const overlayBtn = wrapper.querySelector(".overlay-btn");
+      const controlsContainer = wrapper.nextElementSibling.querySelector(".controls-container");
 
-      const isNewest = wrapper.dataset.newest === "true";
-      const bottomContainer = isNewest ? wrapper.nextElementSibling.querySelector(".play-btn-bottom-container") : null;
+      let controlsAdded = false;
 
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
+      overlayBtn.addEventListener("click", () => {
         if (video.paused) {
+          // Play video
           if (isMobile()) {
             if (video.requestFullscreen) video.requestFullscreen();
             else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
             else if (video.msRequestFullscreen) video.msRequestFullscreen();
-
             if (screen.orientation && screen.orientation.lock) {
               screen.orientation.lock("landscape").catch(err => console.log(err));
             }
           }
           video.play();
-          btn.innerHTML = "❚❚"; // show pause icon
-          if (isNewest) {
-            btn.classList.add("play-btn-bottom");
-            bottomContainer.appendChild(btn);
-          }
-        } else {
-          video.pause();
-          btn.innerHTML = "▶"; // show play icon
-          if (isNewest) {
-            btn.classList.remove("play-btn-bottom");
-            wrapper.appendChild(btn); // move back to overlay
+
+          // Remove overlay button
+          overlayBtn.remove();
+
+          // Add episode controls only once
+          if (!controlsAdded) {
+            const playPauseBtn = document.createElement("div");
+            playPauseBtn.className = "play-btn";
+            playPauseBtn.innerHTML = "❚❚";
+            controlsContainer.appendChild(playPauseBtn);
+
+            playPauseBtn.addEventListener("click", () => {
+              if (video.paused) {
+                video.play();
+                playPauseBtn.innerHTML = "❚❚";
+              } else {
+                video.pause();
+                playPauseBtn.innerHTML = "▶";
+              }
+            });
+
+            const startBtn = document.createElement("div");
+            startBtn.className = "play-btn start-btn";
+            startBtn.innerHTML = "⟳";
+            controlsContainer.appendChild(startBtn);
+
+            startBtn.addEventListener("click", () => {
+              video.currentTime = 0;
+              video.play();
+              playPauseBtn.innerHTML = "❚❚";
+            });
+
+            controlsAdded = true;
           }
         }
       });
 
       video.addEventListener("ended", () => {
-        if (isNewest) {
-          btn.classList.remove("play-btn-bottom");
-          wrapper.appendChild(btn); // move back to overlay
-        }
-        btn.innerHTML = "▶"; // reset to play icon
+        const playBtn = controlsContainer.querySelector(".play-btn");
+        if (playBtn) playBtn.innerHTML = "▶";
       });
     });
 
