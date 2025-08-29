@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CT Scan The Word</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+.play-btn {
+  cursor: pointer;
+  font-size: 48px;
+  text-shadow: 2px 2px 4px black;
+}
+.video-wrapper {
+  position: relative;
+}
+</style>
+</head>
+<body class="w3-light-grey w3-content w3-center" style="max-width:1600px">
+
+<!-- Sidebar/menu 
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container">
+    <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
+      <i class="fa fa-remove"></i>
+    </a>
+    <img src="/w3images/avatar_g2.jpg" style="width:45%;" class="w3-round"><br><br>
+    <h4><b>PORTFOLIO</b></h4>
+    <p class="w3-text-grey">Template by W3.CSS</p>
+  </div>
+  <div class="w3-bar-block">
+    <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal">
+      <i class="fa fa-th-large fa-fw w3-margin-right"></i>PORTFOLIO</a> 
+    <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding">
+      <i class="fa fa-user fa-fw w3-margin-right"></i>ABOUT</a> 
+    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding">
+      <i class="fa fa-envelope fa-fw w3-margin-right"></i>CONTACT</a>
+  </div>
+</nav>
+-->
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay  w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main w3-center">
+
+  <!-- Header -->
+  <header id="portfolio">
+    <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
+    <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+    <div class="w3-container">
+      <h1><b>CT Scan => The Word</b></h1>
+      <div class="w3-section w3-bottombar w3-padding-16">
+        <!--
+        <span class="w3-margin-right">Filter:</span> 
+        <button class="w3-button w3-black">ALL</button>
+        <button class="w3-button w3-white"><i class="fa fa-diamond w3-margin-right"></i>Design</button>
+        <button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
+        <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>-->
+      </div>
+    </div>
+  </header>
+
+  <!-- First Video Grid -->
+  <div class="w3-row-padding">
+    <div class="w3-third w3-container w3-margin-bottom">
+      <div class="w3-display-container video-wrapper">
+        <video class="thumb-video" style="width:100%" poster="img/theif.jpg">
+          <source src="videos/ctaug18th25.mp4" type="video/mp4">
+        </video>
+        <div class="play-btn w3-display-middle w3-text-white">▶</div>
+      </div>
+      <div class="w3-container w3-white">
+        <p><b>Episode 1: </b>Don't Let The Theif In</p>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="w3-third w3-container w3-margin-bottom">
+      <div class="w3-display-container video-wrapper">
+        <video class="thumb-video" style="width:100%" poster="img/goliath.jpg">
+            <source src="videos/ctaug18th2nd.mp4" type="video/mp4">
+        </video>
+        <div class="play-btn w3-display-middle w3-text-white">▶</div>
+      </div>
+      <div class="w3-container w3-white">
+        <p><b>Episode 2:</b> Conquer Those Giants</p>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="w3-third w3-container">
+      <div class="w3-display-container video-wrapper">
+        <video class="thumb-video" style="width:100%" poster="img/boat.jpg">
+            <source src="videos/ctaug14th25.mp4" type="video/mp4">
+        </video>
+        <div class="play-btn w3-display-middle w3-text-white">▶</div>
+      </div>
+      <div class="w3-container w3-white">
+        <p><b>Episode 3: </b> Jesus Can Calm The Storm</p>
+        <p></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Second Video Grid -->
+  <div class="w3-row-padding">
+    <div class="w3-third w3-container w3-margin-bottom">
+      <div class="w3-display-container video-wrapper">
+        <video class="thumb-video" style="width:100%" poster="img/light.jpg">
+          <source src="videos/ctgen1_2.mp4" type="video/mp4">
+        </video>
+        <div class="play-btn w3-display-middle w3-text-white">▶</div>
+      </div>
+      <div class="w3-container w3-white">
+        <p><b>Episode 4: </b>Let There Be Light</p>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="w3-third w3-container w3-margin-bottom">
+      <div class="w3-display-container video-wrapper">
+        <video class="thumb-video" style="width:100%" poster="img/fish.jpg">
+            <source src="videos/ctgen1_20.mp4" type="video/mp4">
+        </video>
+        <div class="play-btn w3-display-middle w3-text-white">▶</div>
+      </div>
+      <div class="w3-container w3-white">
+        <p><b>Episode 5: </b> Let The Waters Bring Forth</p>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="w3-third w3-container">
+      <div class="w3-display-container video-wrapper">
+        <video class="thumb-video" style="width:100%" poster="img/lilies.jpg">
+            <source src="videos/ctaug22.mp4" type="video/mp4">
+        </video>
+        <div class="play-btn w3-display-middle w3-text-white">▶</div>
+      </div>
+      <div class="w3-container w3-white">
+        <p><b>Episode 6:</b> Not Arrayed Like One Of These</p>
+        <p></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w3-container w3-padding-32 w3-dark-grey ">
+    <div class="w3-row-padding">
+      <div class="">
+        <h3 class="w3-center">FOOTER</h3>
+        <p>CT Scan => The Word</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+
+// Mobile detect
+function isMobile() {
+  return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+}
+
+// Play/pause logic
+document.querySelectorAll(".video-wrapper").forEach(wrapper => {
+  const video = wrapper.querySelector(".thumb-video");
+  const btn = wrapper.querySelector(".play-btn");
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (video.paused) {
+      if (isMobile()) {
+        if (video.requestFullscreen) video.requestFullscreen();
+        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+        else if (video.msRequestFullscreen) video.msRequestFullscreen();
+
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock("landscape").catch(err => console.log(err));
+        }
+      }
+      video.play();
+      btn.innerHTML = "❚❚";
+    } else {
+      video.pause();
+      btn.innerHTML = "▶";
+    }
+  });
+
+  video.addEventListener("ended", () => {
+    btn.innerHTML = "▶";
+  });
+});
+</script>
+
+</body>
+</html>
