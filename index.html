@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CT Scan The Word</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif;}
+.play-btn {
+  cursor: pointer;
+  font-size: 48px;
+  text-shadow: 2px 2px 4px black;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.play-btn-bottom {
+  position: static;
+  transform: none;
+  margin-top: 8px;
+  font-size: 36px;
+}
+.video-wrapper {
+  position: relative;
+  margin-bottom: 0; /* remove extra space */
+}
+.episode-info {
+  margin: 0;
+  padding: 4px 8px; /* optional padding */
+}
+#wrapper-newest {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+</style>
+</head>
+<body class="w3-grey w3-content w3-center" style="max-width:1600px">
+
+<!-- Page Header -->
+<header id="portfolio" class="w3-container w3-center w3-padding-32">
+  <h1 class="w3-text-aqua"><b>CT Scan => The Word</b></h1>
+</header>
+
+<!-- Videos Container -->
+<div id="videos-container" class="w3-container"></div>
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-32 w3-black">
+  <div class="w3-center">
+    <h3>THIS HAS BEEN</h3>
+    <h4>CT Scan => The Word</h4>
+  </div>
+</footer>
+
+<script>
+// Mobile detect
+function isMobile() {
+  return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+}
+
+// Fetch videos JSON and render
+fetch('videos.json')
+  .then(res => res.json())
+  .then(videos => {
+    // Sort by date descending (newest first)
+    videos.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+    const container = document.getElementById('videos-container');
+
+    // Show newest video on top, centered
+    const newest = videos[0];
+    const newestHTML = `
+      <div id="wrapper-newest">
+        <div class="w3-third w3-container" style="margin:auto">
+          <div class="w3-display-container video-wrapper" data-newest="true">
+            <video class="thumb-video" style="width:100%" poster="img/${newest.poster}">
+              <source src="videos/${newest.file}" type="video/mp4">
+            </video>
+            <div class="play-btn">▶</div>
+          </div>
+          <div class="w3-container w3-white episode-info">
+            <p><b>Episode:</b> ${newest.title}</p>
+            <div class="play-btn-bottom-container"></div>
+          </div>
+        </div>
+      </div>
+      <hr>
+    `;
+    container.innerHTML += newestHTML;
+
+    // Remaining videos for the grid
+    const gridVideos = videos.slice(1);
+    for (let i = 0; i < gridVideos.length; i += 3) {
+      const rowVideos = gridVideos.slice(i, i+3);
+      let rowHTML = `<div class="w3-row-padding">`;
+      rowVideos.forEach(video => {
+        rowHTML += `
+          <div class="w3-third w3-container w3-margin-bottom">
+            <div class="w3-display-container video-wrapper">
+              <video class="thumb-video" style="width:100%" poster="img/${video.poster}">
+                <source src="videos/${video.file}" type="video/mp4">
+              </video>
+              <div class="play-btn">▶</div>
+            </div>
+            <div class="w3-container w3-white episode-info">
+              <p><b>Episode:</b> ${video.title}</p>
+            </div>
+          </div>
+        `;
+      });
+      rowHTML += `</div>`;
+      container.innerHTML += rowHTML;
+    }
+
+    // Add play/pause functionality
+    document.querySelectorAll(".video-wrapper").forEach(wrapper => {
+      const video = wrapper.querySelector(".thumb-video");
+      const btn = wrapper.querySelector(".play-btn");
+
+      const isNewest = wrapper.dataset.newest === "true";
+      const bottomContainer = isNewest ? wrapper.nextElementSibling.querySelector(".play-btn-bottom-container") : null;
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (video.paused) {
+          if (isMobile()) {
+            if (video.requestFullscreen) video.requestFullscreen();
+            else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+            else if (video.msRequestFullscreen) video.msRequestFullscreen();
+
+            if (screen.orientation && screen.orientation.lock) {
+              screen.orientation.lock("landscape").catch(err => console.log(err));
+            }
+          }
+          video.play();
+          btn.innerHTML = "❚❚"; // show pause icon
+          if (isNewest) {
+            btn.classList.add("play-btn-bottom");
+            bottomContainer.appendChild(btn);
+          }
+        } else {
+          video.pause();
+          btn.innerHTML = "▶"; // show play icon
+          if (isNewest) {
+            btn.classList.remove("play-btn-bottom");
+            wrapper.appendChild(btn); // move back to overlay
+          }
+        }
+      });
+
+      video.addEventListener("ended", () => {
+        if (isNewest) {
+          btn.classList.remove("play-btn-bottom");
+          wrapper.appendChild(btn); // move back to overlay
+        }
+        btn.innerHTML = "▶"; // reset to play icon
+      });
+    });
+
+  })
+  .catch(err => console.error("Error loading videos.json:", err));
+</script>
+
+</body>
+</html>
