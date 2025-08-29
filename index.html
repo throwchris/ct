@@ -129,12 +129,10 @@ fetch('videos.json')
     // Video control logic
     document.querySelectorAll(".video-wrapper").forEach(wrapper => {
       const video = wrapper.querySelector(".thumb-video");
-      const overlayBtn = wrapper.querySelector(".overlay-btn");
+      let overlayBtn = wrapper.querySelector(".overlay-btn");
       const controlsContainer = wrapper.nextElementSibling.querySelector(".controls-container");
 
-      let controlsAdded = false;
-
-      overlayBtn.addEventListener("click", () => {
+      const playHandler = () => {
         if (video.paused) {
           // Play video
           if (isMobile()) {
@@ -150,42 +148,52 @@ fetch('videos.json')
           // Remove overlay button
           overlayBtn.remove();
 
-          // Add episode controls only once
-          if (!controlsAdded) {
-            const playPauseBtn = document.createElement("div");
-            playPauseBtn.className = "play-btn";
-            playPauseBtn.innerHTML = "❚❚";
-            controlsContainer.appendChild(playPauseBtn);
+          // Add controls dynamically
+          controlsContainer.innerHTML = ""; // clear old ones
+          const playPauseBtn = document.createElement("div");
+          playPauseBtn.className = "play-btn";
+          playPauseBtn.innerHTML = "❚❚";
+          controlsContainer.appendChild(playPauseBtn);
 
-            playPauseBtn.addEventListener("click", () => {
-              if (video.paused) {
-                video.play();
-                playPauseBtn.innerHTML = "❚❚";
-              } else {
-                video.pause();
-                playPauseBtn.innerHTML = "▶";
-              }
-            });
-
-            const startBtn = document.createElement("div");
-            startBtn.className = "play-btn start-btn";
-            startBtn.innerHTML = "⟳";
-            controlsContainer.appendChild(startBtn);
-
-            startBtn.addEventListener("click", () => {
-              video.currentTime = 0;
+          playPauseBtn.addEventListener("click", () => {
+            if (video.paused) {
               video.play();
               playPauseBtn.innerHTML = "❚❚";
-            });
+            } else {
+              video.pause();
+              playPauseBtn.innerHTML = "▶";
+            }
+          });
 
-            controlsAdded = true;
-          }
+          const startBtn = document.createElement("div");
+          startBtn.className = "play-btn start-btn";
+          startBtn.innerHTML = "⟳";
+          controlsContainer.appendChild(startBtn);
+
+          startBtn.addEventListener("click", () => {
+            video.currentTime = 0;
+            video.play();
+            playPauseBtn.innerHTML = "❚❚";
+          });
         }
-      });
+      };
+
+      overlayBtn.addEventListener("click", playHandler);
 
       video.addEventListener("ended", () => {
-        const playBtn = controlsContainer.querySelector(".play-btn");
-        if (playBtn) playBtn.innerHTML = "▶";
+        // Reset video to show poster
+        video.currentTime = 0;
+        video.load();
+
+        // Clear controls
+        controlsContainer.innerHTML = "";
+
+        // Recreate overlay play button
+        overlayBtn = document.createElement("div");
+        overlayBtn.className = "play-btn overlay-btn";
+        overlayBtn.innerHTML = "▶";
+        wrapper.appendChild(overlayBtn);
+        overlayBtn.addEventListener("click", playHandler);
       });
     });
 
